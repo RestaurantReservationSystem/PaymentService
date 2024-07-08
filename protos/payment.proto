@@ -29,11 +29,12 @@ message  PaymentsResponse{
   repeated  PaymentResponse payments=1;
 }
 message  GetAllPaymentRequest{
-  string  reservation_id=1;
-  float  amount=2;
-  string  payment_method=3;
-  string  payment_status=4;
-  Filter limitOffset=5;
+  string  Id=1;
+  string  reservation_id=2;
+  float  amount=3;
+  string  payment_method=4;
+  string  payment_status=5;
+  Filter limitOffset=6;
 }
 
 service  PaymentService {
