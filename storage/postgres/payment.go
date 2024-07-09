@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"database/sql"
+	"fmt"
 	pb "payment_service/genproto"
 	help "payment_service/help"
 	"time"
@@ -18,6 +19,7 @@ func NewPaymentRepository(db *sql.DB) *PaymentRepository {
 func (repo *PaymentRepository) CreatePayment(request *pb.CreatePaymentRequest) (*pb.Void, error) {
 	_, err := repo.Db.Exec("insert into  payments(reservation_id,amount,payment_method,payment_status,created_at) values ($1,$2,$3,$4,$5)", request.ReservationId, request.Amount, request.PaymentMethod, request.PaymentStatus, time.Now())
 	if err != nil {
+		fmt.Println("++++++++", err)
 		return nil, err
 	}
 	return &pb.Void{}, err
@@ -39,7 +41,7 @@ func (repo *PaymentRepository) DeletedPayment(request *pb.IdRequest) (*pb.Void, 
 }
 func (repo *PaymentRepository) GetByIdPayment(request *pb.IdRequest) (*pb.PaymentResponse, error) {
 	var response pb.PaymentResponse
-	err := repo.Db.QueryRow("select reservation_id, amount,payment_method,payment_status from payments where  id=$1 and delted_at is null ", request.Id).Scan(&response.ReservationId, &response.Amount, &response.PaymentMethod, &response.PaymentStatus)
+	err := repo.Db.QueryRow("select reservation_id, amount,payment_method,payment_status from payments where  id=$1 and deleted_at is null ", request.Id).Scan(&response.ReservationId, &response.Amount, &response.PaymentMethod, &response.PaymentStatus)
 	if err != nil {
 		return nil, err
 	}
