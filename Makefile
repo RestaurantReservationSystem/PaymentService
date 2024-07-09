@@ -10,7 +10,7 @@ mig-force:
 mig-goto:
 	migrate -database ${DB_URL} -path migrations goto 1
 mig-file:
-	migrate create -ext sql -dir migrations -seq menu
+	migrate create -ext sql -dir migrations -seq payment
 
 mod:
 	go mod init composition_service

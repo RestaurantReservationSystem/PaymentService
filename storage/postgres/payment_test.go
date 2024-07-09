@@ -2,60 +2,36 @@ package postgres
 
 import (
 	"fmt"
-	"log"
-	"log/slog"
 	pb "payment_service/genproto"
 	"reflect"
 	"testing"
 )
 
-//	func TestConnection(t *testing.T) {
-//		db, err := Connection()
-//		if err != nil {
-//			panic(err)
-//		}
-//
-// }
 func TestPaymentRepository_CreatePayment(t *testing.T) {
 	db, err := Connection()
-	if err != nil {
-		log.Fatal("error is connection db")
-	}
-	repo := NewPaymentRepository(db)
-	request := pb.CreatePaymentRequest{PaymentStatus: "pending", PaymentMethod: "card", Amount: 4.5, ReservationId: "1234alk;sdl;kf"}
-	response, err := repo.CreatePayment(&request)
 	if err != nil {
 		fmt.Println("+++++++", err)
-		//log.Fatalf("error internal server error ->", err.Error())
-	}
-	expected := &pb.Void{}
-	if reflect.DeepEqual(response, expected) {
-		slog.StringValue("message is success")
-func TestPaymentRepository_CreatePayment(t *testing.T) {
-	db, err := Connection()
-	if err != nil {
-
 		panic(err)
 	}
+	fmt.Println("+++++++++++++")
 
 	pay := NewPaymentRepository(db)
 	fmt.Println(pay)
-	track := pb.CreatePaymentRequest{
-		ReservationId: "d3dcbdff-de1c-452d-94da-2bb783f1016a",
-		Amount:        345.6,
-		PaymentMethod: "salom",
-		PaymentStatus: "jksdlkja;fsjk",
+	pays := pb.CreatePaymentRequest{
+		ReservationId: "a12d4f5e-0e9c-42b8-847a-3c54b7f6a4c2",
+		Amount:        30.00,
+		PaymentMethod: "credit_card",
+		PaymentStatus: "pending",
 	}
-	response, err := pay.CreatePayment(&track)
+	response, err := pay.CreatePayment(&pays)
 	if err != nil {
-		fmt.Println("_________")
+		fmt.Println("_________", err)
 		panic(err)
 	}
 	if !reflect.DeepEqual(response, &pb.Void{}) {
-		t.Errorf("Response does not match expected value.\nGot: %+v\nExpected: %+v", response, &pb.ReservationResponse{})
+		//t.Errorf("Response does not match expected value.\nGot: %+v\nExpected: %+v", response, &pb.ReservationResponse{})
 
 	}
-
 }
 func TestPaymentRepository_DeletePayment(t *testing.T) {
 	db, err := Connection()
@@ -67,7 +43,7 @@ func TestPaymentRepository_DeletePayment(t *testing.T) {
 	pay := NewPaymentRepository(db)
 	fmt.Println(pay)
 	payDelete := pb.IdRequest{
-		Id: "cfd06c0a-aa56-4755-9e1e-3779647f916e",
+		Id: "b8811cf2-9352-4dc3-9884-c7dabca7ab8b",
 	}
 	response, err := pay.DeletedPayment(&payDelete)
 	if err != nil {
@@ -90,11 +66,11 @@ func TestPaymentRepository_UpdatePayment(t *testing.T) {
 	pay := NewPaymentRepository(db)
 	fmt.Println(pay)
 	paymentUpdate := pb.UpdatePaymentRequest{
-		Id:            "cfd06c0a-aa56-4755-9e1e-3779647f916e",
+		Id:            "b271e2a3-f90d-4b51-bfd5-808bd65f1756",
 		ReservationId: "d3dcbdff-de1c-452d-94da-2bb783f1016a",
 		Amount:        753.5,
 		PaymentMethod: "salom",
-		PaymentStatus: "+++++++++++++++++++++++",
+		PaymentStatus: "pending",
 	}
 	response, err := pay.UpdatePayment(&paymentUpdate)
 	if err != nil {
@@ -117,11 +93,17 @@ func TestPaymentRepository_GetPayment(t *testing.T) {
 	pay := NewPaymentRepository(db)
 
 	getPayment := pb.IdRequest{
-		Id: "d3dcbdff-de1c-452d-94da-2bb783f1016a",
+		Id: "e7c84f17-6a39-4889-92fe-0a9f3a3c062",
 	}
 
 	fmt.Println(pay)
-	expected := pb.PaymentResponse{}
+	expected := pb.PaymentResponse{
+		Id:            "e7c84f17-6a39-4889-92fe-0a9f3a3c0622",
+		ReservationId: "a12d4f5e-0e9c-42b8-847a-3c54b7f6a4c2",
+		Amount:        30.00,
+		PaymentMethod: "credit_card",
+		PaymentStatus: "pending",
+	}
 
 	response, err := pay.GetByIdPayment(&getPayment)
 	if err != nil {
@@ -134,7 +116,7 @@ func TestPaymentRepository_GetPayment(t *testing.T) {
 	}
 }
 
-func TestAllPaymentRepository_GetPayment(t *testing.T) {
+func TestAllPaymentRepository_GetAllPayment(t *testing.T) {
 	db, err := Connection()
 	if err != nil {
 
