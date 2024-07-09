@@ -7,10 +7,18 @@ import (
 	"testing"
 )
 
+//	func TestConnection(t *testing.T) {
+//		db, err := Connection()
+//		if err != nil {
+//			panic(err)
+//		}
+//
+// }
+
 func TestPaymentRepository_CreatePayment(t *testing.T) {
 	db, err := Connection()
 	if err != nil {
-		fmt.Println("+++++++", err)
+
 		panic(err)
 	}
 	fmt.Println("+++++++++++++")
@@ -29,7 +37,7 @@ func TestPaymentRepository_CreatePayment(t *testing.T) {
 		panic(err)
 	}
 	if !reflect.DeepEqual(response, &pb.Void{}) {
-		//t.Errorf("Response does not match expected value.\nGot: %+v\nExpected: %+v", response, &pb.ReservationResponse{})
+		t.Errorf("Response does not match expected value.\nGot: %+v\nExpected: %+v", response, &pb.ReservationResponse{})
 
 	}
 }
@@ -126,7 +134,6 @@ func TestAllPaymentRepository_GetAllPayment(t *testing.T) {
 	payment := NewPaymentRepository(db)
 
 	getAllPayments := pb.GetAllPaymentRequest{
-		Id:            "cfd06c0a-aa56-4755-9e1e-3779647f916e",
 		ReservationId: "d3dcbdff-de1c-452d-94da-2bb783f1016a",
 		Amount:        753.5,
 		PaymentMethod: "salom",
